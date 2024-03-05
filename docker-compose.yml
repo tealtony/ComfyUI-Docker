@@ -1,0 +1,49 @@
+#Reference: https://github.com/ai-dock/comfyui/tree/main
+version: "3.8"
+
+# Compose file build variables set in .env
+services:
+  app:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    ## For Nvidia GPU's - You probably want to uncomment this
+    deploy:
+     resources:
+       reservations:
+         devices:
+           - driver: nvidia
+             count: all
+             capabilities: [gpu]
+
+    # devices:
+    #   - "/dev/dri:/dev/dri"    
+
+    volumes:
+      - "./.workspace/models:/app/models"
+      - "./.workspace/models/checkpoints:/app/models/checkpoints"
+      - "./.workspace/models/clip:/app/models/clip"
+      - "./.workspace/models/clip_vision:/app/models/clip_vision"
+      - "./.workspace/models/configs:/app/models/configs"
+      - "./.workspace/models/controlnet:/app/models/controlnet"
+      - "./.workspace/models/diffusers:/app/models/diffusers"
+      - "./.workspace/models/embeddings:/app/models/embeddings"
+      - "./.workspace/models/gligen:/app/models/gligen"
+      - "./.workspace/models/hypernetworks:/app/models/hypernetworks"
+      - "./.workspace/models/loras:/app/models/loras"
+      - "./.workspace/models/photomaker:/app/models/photomaker"
+      - "./.workspace/models/style_models:/app/models/style_models"
+      - "./.workspace/models/unet:/app/models/unet"
+      - "./.workspace/models/upscale_models:/app/models/upscale_models"
+      - "./.workspace/models/vae:/app/models/vae"
+      - "./.workspace/models/vae_approx:/app/models/vae_approx"
+      - "./.workspace/custom_nodes:/app/custom_nodes"
+      - "./.workspace/user:/app/user"
+      - "./.workspace/input:/app/input"
+      - "./.workspace/output:/app/output"
+
+    ports:
+        # ComfyUI web interface
+        - 8188:8188
